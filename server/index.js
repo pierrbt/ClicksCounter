@@ -6,8 +6,6 @@ const db = new sqlite3.Database('./db.sqlite3');
 const app = express()
 const port = 5000
 
-//app.use(express.json());
-//app.use(require('cors'))
 
 // create table if not exists
 db.run('CREATE TABLE IF NOT EXISTS tries (id INTEGER PRIMARY KEY AUTOINCREMENT, cps DECIMAL, user VARCHAR(200), date TIMESTAMP DEFAULT CURRENT_TIMESTAMP)');
@@ -18,8 +16,12 @@ app.get('/', (req, res) => {
 
 
 app.get('/list', (req, res) => {
+    let order = req.query.order;
+    if (!order) {
+        order = "date"
+    }
     res.header("Content-Type",'application/json');
-    db.all('SELECT * FROM tries ORDER BY date DESC', (err, rows) => {
+    db.all('SELECT * FROM tries ORDER BY ' + order + ' DESC', (err, rows) => {
         if (err) {
             throw err;
         }
@@ -47,8 +49,8 @@ app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
 })
 
-// close the db before exiting
 process.on('SIGINT', () => {
+    console.log('Closing database')
     db.close();
     process.exit();
 });
