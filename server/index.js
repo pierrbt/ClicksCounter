@@ -1,3 +1,13 @@
+/*
+ * Serveur de l'application de compteur de CPS
+ * Auteur : Pierre BIDET
+ * Date : 2023_05_03
+ * Version : 1.0.0
+ * Langage : NodeJS
+ * Framework : Express
+ * Licence : CC BY-NC-SA 4.0
+ */
+
 const express = require('express')
 const sqlite3 = require('sqlite3').verbose()
 
