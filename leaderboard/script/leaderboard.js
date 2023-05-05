@@ -1,10 +1,7 @@
 
 async function Load()
 {
-    const data = await fetch("/api/list", {
-        "Method": "GET",
-        "Content-Type": "text/plain",
-    })
+    const data = await fetch("/api/list?order=score")
         .then((res) => {
             if(!res.ok)
             {
