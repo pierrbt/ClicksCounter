@@ -29,18 +29,16 @@ let locked = false;
 Begin();
 setListeners();
 
-async function boutonClic(event: any)
-{
-     if (event.key === ' ' || event.key === 'Spacebar') return;
+async function boutonClic(event: any) {
+    if (event.button !== 0) return;
 
-    if(startTime === 0)
-    {
-        value.style.transform = "scale(1)";
-        value.style.transition = "none";
+    if (startTime === 0) {
+        value.style.transform = 'scale(1)';
+        value.style.transition = 'none';
         startTime = Date.now() / 1000;
         interval = setInterval(Update, MAX_TIME);
     }
-    clics.push((Date.now() / 1000) - startTime);
+    clics.push(Date.now() / 1000 - startTime);
     value.innerHTML = clics.length;
 }
 
@@ -83,7 +81,8 @@ async function Update() {
 function setListeners()
 {
     btn.disabled = false;
-    btn.addEventListener('click', boutonClic);
+    btn.addEventListener('mouseup', boutonClic);
+
 }
 
 function removeListeners()
@@ -93,8 +92,8 @@ function removeListeners()
 }
 
 
-function Begin()
-{
+function Begin() {
+    // Récupération des éléments HTML nécessaires
     const loginDiv = document.getElementsByClassName('login')[0] as HTMLDivElement;
     const valueDiv = document.getElementById('username') as HTMLInputElement;
     const buttonDiv = document.getElementById('confirm') as HTMLButtonElement;
@@ -103,56 +102,51 @@ function Begin()
     const serverValue = document.getElementById('server') as HTMLInputElement;
     const serverButton = document.getElementById('confirm-server') as HTMLButtonElement;
 
-
-    if(!api.getServer())
-    {
+    // Vérification de l'état de connexion
+    if (!api.getServer()) {
+        // Affichage des éléments de serveur et masquage des éléments de connexion
         serverDiv.style.display = "flex";
         loginDiv.style.display = "none";
 
+        // Ajout de l'événement de saisie de touche pour le serveur
         serverDiv.addEventListener('keydown', (e) => {
-            if(e.key === "Enter")
-            {
-                if(serverValue.value)
-                {
+            if (e.key === "Enter") {
+                if (serverValue.value) {
                     api.setServer(serverValue.value);
                     serverDiv.removeEventListener('keydown', () => {});
                     Begin();
-
                 }
             }
         });
 
+        // Ajout de l'événement de clic pour le bouton de serveur
         serverButton.addEventListener('click', () => {
-            if(serverValue.value)
-            {
+            if (serverValue.value) {
                 api.setServer(serverValue.value);
                 Begin();
             }
         });
-    }
-    else
-    {
+    } else {
+        // Masquage des éléments de serveur
         serverDiv.style.display = "none";
-        if(!pseudo)
-        {
+        if (!pseudo) {
+            // Affichage des éléments de connexion
             loginDiv.style.display = "flex";
 
+            // Ajout de l'événement de saisie de touche pour la connexion
             loginDiv.addEventListener('keydown', (e) => {
-                if(e.key === "Enter")
-                {
-                    if(valueDiv.value)
-                    {
+                if (e.key === "Enter") {
+                    if (valueDiv.value) {
                         pseudo = valueDiv.value;
                         loginDiv.removeEventListener('keydown', () => {});
                         Begin();
-
                     }
                 }
             });
 
+            // Ajout de l'événement de clic pour le bouton de connexion
             buttonDiv.addEventListener('click', () => {
-                if(valueDiv.value)
-                {
+                if (valueDiv.value) {
                     pseudo = valueDiv.value;
                     logout.addEventListener('click', () => {
                         pseudo = "";
@@ -162,15 +156,11 @@ function Begin()
                     Begin();
                 }
             });
-
-
-        }
-        else
-        {
+        } else {
+            // Chargement du classement
             loadLeaderboard();
+            // Masquage des éléments de connexion
             loginDiv.style.display = "none";
         }
     }
-
 }
-
