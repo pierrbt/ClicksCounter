@@ -12,6 +12,8 @@ let clics: any = [];
 let interval: any
 let pseudo: string;
 
+let locked = false;
+
 Begin();
 setListeners();
 
@@ -29,15 +31,18 @@ async function boutonClic() {
 
 
 async function Update() {
+    if(locked) return;
+    locked = true;
     let t = (Date.now() / 1000) - startTime
     timeV.innerHTML = t.toFixed(1).toString() + "s";
 
     if(t > 10)
     {
+        removeListeners();
+
         let cps = (clics.length / MAX_TIME).toFixed(2);
 
         const nom = pseudo;
-        console.log(nom);
 
         savePlayer(nom, cps);
         loadLeaderboard();
@@ -49,9 +54,8 @@ async function Update() {
 
         startTime = 0;
         clics = [];
-        removeListeners();
-        setInterval(setListeners, 3000);
 
+        setInterval(setListeners, 5000);
         clearInterval(interval);
     }
     else
@@ -62,16 +66,19 @@ async function Update() {
 
         CPS.innerHTML = lastS.length + " CPS";
     }
+    locked = false;
 }
 
 function setListeners()
 {
+    btn.disabled = false;
     btn.addEventListener('click', boutonClic);
     btn.addEventListener('contextmenu', boutonClic);
 }
 
 function removeListeners()
 {
+    btn.disabled = true;
     btn.removeEventListener('click', boutonClic);
     btn.removeEventListener('contextmenu', boutonClic)
 }
