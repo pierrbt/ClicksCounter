@@ -31,5 +31,16 @@ export const rules: Required<ModuleOptions>['rules'] = [
   {
     test: /\.css$/,
     use: [{ loader: 'style-loader' }, { loader: 'css-loader' }],
+  },
+  {
+    test: /\.svg$/,
+    use: [
+      {
+        loader: 'svg-url-loader',
+        options: {
+          limit: 10000,
+        },
+      },
+    ],
   }
 ];

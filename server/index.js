@@ -14,6 +14,8 @@ const sqlite3 = require('sqlite3').verbose()
 const app = express()
 const port = 5000
 
+app.use(require('cors'));
+
 // Connexion à la base de données SQLite3
 const db = new sqlite3.Database('./db.sqlite3', (err) => {
     if (err) {
@@ -43,6 +45,9 @@ app.get('/api', (req, res) => {
 
 // Route pour la liste des essais
 app.get('/api/list', (req, res) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Content-Type', 'application/json');
+
     const order = req.query.order || "date";
 
     // Protection contre les injections SQL en utilisant des paramètres préparés
@@ -52,32 +57,34 @@ app.get('/api/list', (req, res) => {
             res.status(500).send(JSON.stringify({error: 'internal server error'}));
             return;
         }
-        res.header("Content-Type",'application/json');
         res.send(JSON.stringify(rows));
     });
 });
 
 // Route pour l'optention d'information sur un utilisateur précis
 app.get('/api/get', (req, res) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Content-Type', 'application/json');
+
     const {pseudo, filter} = req.query;
-
-
     db.all(`SELECT * FROM tries WHERE user = ? ORDER BY ?`, [pseudo, filter], (err, rows) => {
         if (err) {
             console.error(err.message);
             res.status(500).send(JSON.stringify({error: 'internal server error'}));
             return;
         }
-        res.header("Content-Type",'application/json');
         res.send(JSON.stringify(rows));
     });
 });
 
 // Route pour ajouter un essai
 app.get('/api/add', (req, res) => {
-    const score = req.query.score;
-    const user = req.query.user;
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Content-Type', 'application/json');
 
+    const score = req.query.cps;
+    const user = req.query.user;
+    console.log(`Utilisateur ${user} a fait ${score} CPS`)
     if (!score || !user) {
         res.status(400).send(JSON.stringify({error: 'missing parameters'}));
         return;

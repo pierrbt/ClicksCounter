@@ -8,14 +8,15 @@
  * Licence : CC BY-NC-SA 4.0
  */
 
-import { savePlayer, loadLeaderboard } from "./classement";
+import {loadLeaderboard, savePlayer} from "./classement";
 
 const MAX_TIME = 10
 
 const value = document.getElementsByClassName('score-value')[0] as HTMLInputElement;
-const btn = document.getElementsByClassName('circle')[0];
+const btn = document.getElementsByClassName('circle')[0] as HTMLButtonElement;
 const timeV = document.getElementsByClassName('time-value')[0];
 const CPS = document.getElementsByClassName('cps')[0];
+const logout = document.getElementsByClassName('logout')[0] as HTMLImageElement;
 
 let startTime = 0;
 let clics: any = [];
@@ -27,7 +28,10 @@ let locked = false;
 Begin();
 setListeners();
 
-async function boutonClic() {
+async function boutonClic(event: any)
+{
+     if (event.key === ' ' || event.key === 'Spacebar') return;
+
     if(startTime === 0)
     {
         value.style.transform = "scale(1)";
@@ -49,32 +53,28 @@ async function Update() {
     if(t > 10)
     {
         removeListeners();
-
         let cps = (clics.length / MAX_TIME).toFixed(2);
-
-        const nom = pseudo;
-
-        savePlayer(nom, cps);
+        savePlayer(pseudo, cps);
         loadLeaderboard();
-
         CPS.innerHTML = cps + " CPS";
-
         value.style.transform = "scale(1.5)";
         value.style.transition = "all 1s ease-in-out";
-
         startTime = 0;
         clics = [];
-
         setInterval(setListeners, 5000);
         clearInterval(interval);
     }
     else
     {
-        let lastS = clics.filter( (value: number) => {
-            return value > ((Date.now() / 1000) - startTime - 1);
+        // check time since beginning
+        let time = (Date.now() / 1000) - startTime;
+        if(time > 3) time = 3;
+
+        const lastClicks = clics.filter( (value: number) => {
+            return value > ((Date.now() / 1000) - startTime - time);
         });
 
-        CPS.innerHTML = lastS.length + " CPS";
+        CPS.innerHTML = (lastClicks.length / time).toFixed(2).toString() + " CPS";
     }
     locked = false;
 }
@@ -83,14 +83,12 @@ function setListeners()
 {
     btn.disabled = false;
     btn.addEventListener('click', boutonClic);
-    btn.addEventListener('contextmenu', boutonClic);
 }
 
 function removeListeners()
 {
     btn.disabled = true;
     btn.removeEventListener('click', boutonClic);
-    btn.removeEventListener('contextmenu', boutonClic)
 }
 
 
@@ -99,16 +97,38 @@ function Begin()
     const loginDiv = document.getElementsByClassName('login')[0] as HTMLDivElement;
     const valueDiv = document.getElementById('username') as HTMLInputElement;
     const buttonDiv = document.getElementById('confirm') as HTMLButtonElement;
+
     if(!pseudo)
     {
         loginDiv.style.display = "flex";
+
+        loginDiv.addEventListener('keydown', (e) => {
+            if(e.key === "Enter")
+            {
+                if(valueDiv.value)
+                {
+                    pseudo = valueDiv.value;
+                    loginDiv.removeEventListener('keydown', () => {});
+                    Begin();
+
+                }
+            }
+        });
+
         buttonDiv.addEventListener('click', () => {
             if(valueDiv.value)
             {
                 pseudo = valueDiv.value;
+                logout.addEventListener('click', () => {
+                    pseudo = "";
+                    Begin();
+                });
+
                 Begin();
             }
         });
+
+
     }
     else
     {

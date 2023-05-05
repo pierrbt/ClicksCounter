@@ -25,6 +25,8 @@ body {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
+
 }
 
 .mail {
@@ -187,3 +189,19 @@ input
   height: 30px;
   margin: 0 auto;
 }
+
+svg {
+  fill: white;
+  margin-right: 50px;
+  width: 36px;
+  height: auto;
+
+  transition: ease-in all 0.3s;
+}
+
+svg:hover {
+  fill: #ccc;
+  scale: 1.2;
+}
+
+

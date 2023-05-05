@@ -9,7 +9,7 @@
  */
 
 declare const api:any;
-const server = "https://veagle.fr";
+const server = "http://localhost:5000";
 
 const players = document.getElementsByClassName('players')[0];
 
@@ -49,6 +49,7 @@ export function loadLeaderboard()
             {"id":1,"cps":9.4,"user":"JonCena","date":"2023-05-03 15:50:24"}
         ];
 
+    console.log(data)
 
     players.innerHTML = "";
 
@@ -62,5 +63,5 @@ export function loadLeaderboard()
 
 export function savePlayer(pseudo: string, cps: any)
 {
-    fetch(server + `/api/add?user=${pseudo}&score=${cps}`);
+    fetch(server + `/api/add?user=${pseudo}&cps=${cps}`);
 }
