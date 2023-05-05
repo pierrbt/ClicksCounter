@@ -27,6 +27,8 @@ body {
   justify-content: space-between;
   align-items: center;
 
+    z-index: 3;
+
 }
 
 .mail {
@@ -184,10 +186,29 @@ input
   height: 30px;
   margin: 0 auto 10px;
 }
-.confirm {
-  width: 100px;
-  height: 30px;
-  margin: 0 auto;
+
+#server {
+    width: 200px;
+    height: 30px;
+    margin: 0 auto 10px;
+}
+
+
+#confirm, #confirm-server {
+  /* 200px width button with hover and rounded, dark background */
+    width: 200px;
+    height: 30px;
+    margin: 0 auto 10px;
+    background-color: #222;
+    color: #fff;
+    border-radius: 4px;
+    border: 1px solid #fff;
+    cursor: pointer;
+    transition: ease-in all 0.3s;
+}
+#confirm:hover, #confirm-server:hover {
+    background-color: #fff;
+    color: #222;
 }
 
 svg {
