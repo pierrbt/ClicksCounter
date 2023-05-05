@@ -9,52 +9,22 @@
  */
 
 
-import { ipcMain, app } from "electron";
+import {app, ipcMain} from "electron";
 import fs from "fs";
 
 
-ipcMain.on("getPlayers", (event) => {
-    const dir = app.getPath("userData") + "/leaderboard";
-    console.log(dir);
-    if(!fs.existsSync(dir))
-        fs.mkdirSync(dir);
-    const file = dir + "/data.json";
-    if(fs.existsSync(file))
-    {
-        let data = JSON.parse(fs.readFileSync(file).toString());
-        event.returnValue = data;
+ipcMain.on("getServer", (event, arg) => {
+    const path = app.getPath("userData") + "/server.txt";
+    if(!fs.existsSync(path)) {
+        event.returnValue = false;
+        return;
     }
-    else
-    {
-        fs.writeFileSync(file, "[]");
-        event.returnValue = [];
-    }
+    event.returnValue = fs.readFileSync(app.getPath("userData") + "/server.txt", "utf-8");
     return;
 });
 
-
-
-ipcMain.on("addPlayer", (event, player, score) => {
-    const dir = app.getPath("userData") + "/leaderboard";
-    console.log(dir);
-    if(!fs.existsSync(dir))
-        fs.mkdirSync(dir);
-    const file = dir + "/data.json";
-    if(fs.existsSync(file))
-    {
-        let data = JSON.parse(fs.readFileSync(file).toString());
-        data.push({pseudo: player,
-            cps: score});
-        fs.writeFileSync(file, JSON.stringify(data));
-        event.returnValue = data;
-    }
-    else
-    {
-        let data = [];
-        data.push({pseudo: player,
-            cps: score});
-        fs.writeFileSync(file, JSON.stringify(data));
-        event.returnValue = data;
-    }
+ipcMain.on("setServer", (event, arg) => {
+    fs.writeFileSync(app.getPath("userData") + "/server.txt", arg);
+    event.returnValue = true;
     return;
-})
+});

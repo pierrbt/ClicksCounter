@@ -8,6 +8,7 @@
  * Licence : CC BY-NC-SA 4.0
  */
 
+declare const api: any;
 import {loadLeaderboard, savePlayer} from "./classement";
 
 const MAX_TIME = 10
@@ -98,42 +99,78 @@ function Begin()
     const valueDiv = document.getElementById('username') as HTMLInputElement;
     const buttonDiv = document.getElementById('confirm') as HTMLButtonElement;
 
-    if(!pseudo)
-    {
-        loginDiv.style.display = "flex";
+    const serverDiv = document.getElementsByClassName('server')[0] as HTMLDivElement;
+    const serverValue = document.getElementById('server') as HTMLInputElement;
+    const serverButton = document.getElementById('confirm-server') as HTMLButtonElement;
 
-        loginDiv.addEventListener('keydown', (e) => {
+
+    if(!api.getServer())
+    {
+        serverDiv.style.display = "flex";
+        loginDiv.style.display = "none";
+
+        serverDiv.addEventListener('keydown', (e) => {
             if(e.key === "Enter")
             {
-                if(valueDiv.value)
+                if(serverValue.value)
                 {
-                    pseudo = valueDiv.value;
-                    loginDiv.removeEventListener('keydown', () => {});
+                    api.setServer(serverValue.value);
+                    serverDiv.removeEventListener('keydown', () => {});
                     Begin();
 
                 }
             }
         });
 
-        buttonDiv.addEventListener('click', () => {
-            if(valueDiv.value)
+        serverButton.addEventListener('click', () => {
+            if(serverValue.value)
             {
-                pseudo = valueDiv.value;
-                logout.addEventListener('click', () => {
-                    pseudo = "";
-                    Begin();
-                });
-
+                api.setServer(serverValue.value);
                 Begin();
             }
         });
-
-
     }
     else
     {
-        loadLeaderboard();
-        loginDiv.style.display = "none";
+        serverDiv.style.display = "none";
+        if(!pseudo)
+        {
+            loginDiv.style.display = "flex";
+
+            loginDiv.addEventListener('keydown', (e) => {
+                if(e.key === "Enter")
+                {
+                    if(valueDiv.value)
+                    {
+                        pseudo = valueDiv.value;
+                        loginDiv.removeEventListener('keydown', () => {});
+                        Begin();
+
+                    }
+                }
+            });
+
+            buttonDiv.addEventListener('click', () => {
+                if(valueDiv.value)
+                {
+                    pseudo = valueDiv.value;
+                    logout.addEventListener('click', () => {
+                        pseudo = "";
+                        Begin();
+                    });
+
+                    Begin();
+                }
+            });
+
+
+        }
+        else
+        {
+            loadLeaderboard();
+            loginDiv.style.display = "none";
+        }
     }
+
 }
 

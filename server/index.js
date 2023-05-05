@@ -14,7 +14,8 @@ const sqlite3 = require('sqlite3').verbose()
 const app = express()
 const port = 5000
 
-app.use(require('cors'));
+const cors = require('cors');
+app.use(cors());
 
 // Connexion à la base de données SQLite3
 const db = new sqlite3.Database('./db.sqlite3', (err) => {
@@ -98,6 +99,13 @@ app.get('/api/add', (req, res) => {
             return;
         }
         res.send(JSON.stringify({id: this.lastID}));
+    });
+
+    db.run(`DELETE FROM tries WHERE user = ? AND id != (SELECT id FROM tries WHERE user = ? ORDER BY cps DESC LIMIT 1)`, [user, user], function (err) {
+        if (err) {
+            console.error(err.message);
+            return;
+        }
     });
 });
 
