@@ -17,7 +17,7 @@ const value = document.getElementsByClassName('score-value')[0] as HTMLInputElem
 const btn = document.getElementsByClassName('circle')[0] as HTMLButtonElement;
 const timeV = document.getElementsByClassName('time-value')[0];
 const CPS = document.getElementsByClassName('cps')[0];
-const logout = document.getElementsByClassName('logout')[0] as HTMLImageElement;
+const logout = document.getElementById("logout-button") as HTMLSpanElement;
 
 let startTime = 0;
 let clics: any = [];
@@ -139,6 +139,12 @@ function Begin() {
                     if (valueDiv.value) {
                         pseudo = valueDiv.value;
                         loginDiv.removeEventListener('keydown', () => {});
+
+                        logout.addEventListener('click', () => {
+                            pseudo = "";
+                            Begin();
+                        });
+
                         Begin();
                     }
                 }
@@ -152,7 +158,6 @@ function Begin() {
                         pseudo = "";
                         Begin();
                     });
-
                     Begin();
                 }
             });
