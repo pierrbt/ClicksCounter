@@ -36,8 +36,13 @@ app.get('/', (req, res) => {
     res.send('Bienvenue sur le serveur de l\'application de compteur de CPS !')
 })
 
+// Route pour la page d'informations sur l'API
+app.get('/api', (req, res) => {
+    res.send('Ceci est l\'API de ClicksCounter, veuillez utiliser l\'application pour y accéder');
+})
+
 // Route pour la liste des essais
-app.get('/list', (req, res) => {
+app.get('/api/list', (req, res) => {
     const order = req.query.order || "date";
 
     // Protection contre les injections SQL en utilisant des paramètres préparés
@@ -52,8 +57,25 @@ app.get('/list', (req, res) => {
     });
 });
 
+// Route pour l'optention d'information sur un utilisateur précis
+app.get('/api/get')
+{
+    const {pseudo, filter} = req.query;
+
+
+    db.all(`SELECT * FROM tries WHERE user = ? ORDER BY ?`, [pseudo, filter], (err, rows) => {
+        if (err) {
+            console.error(err.message);
+            res.status(500).send(JSON.stringify({error: 'internal server error'}));
+            return;
+        }
+        res.header("Content-Type",'application/json');
+        res.send(JSON.stringify(rows));
+    });
+}
+
 // Route pour ajouter un essai
-app.get('/add', (req, res) => {
+app.get('/api/add', (req, res) => {
     const score = req.query.score;
     const user = req.query.user;
 
