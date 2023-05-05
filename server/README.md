@@ -7,5 +7,5 @@ Ce dossier contient le code source de la partie back-end de l'application de com
 
 Je pense que toutes les fonctionnalités y sont présentes, si vous avez des idées de quoi rajouter : 
 
-[x] - Rajouter des TODO
-[] - Faire en sorte que le /leaderboard redirige vers le leaderboard de la plateforme
+[x]  Rajouter des TODO
+[ ]  Faire en sorte que le /leaderboard redirige vers le leaderboard de la plateforme
