@@ -1,4 +1,6 @@
-import { savePlayer, load } from "./classement";
+import { savePlayer, loadLeaderboard } from "./classement";
+
+const MAX_TIME = 10
 
 const value = document.getElementsByClassName('score-value')[0] as HTMLInputElement;
 const btn = document.getElementsByClassName('circle')[0];
@@ -19,7 +21,7 @@ async function boutonClic() {
         value.style.transform = "scale(1)";
         value.style.transition = "none";
         startTime = Date.now() / 1000;
-        interval = setInterval(Update,10);
+        interval = setInterval(Update, MAX_TIME);
     }
     clics.push((Date.now() / 1000) - startTime);
     value.innerHTML = clics.length;
@@ -32,13 +34,13 @@ async function Update() {
 
     if(t > 10)
     {
-        let cps = (clics.length / 10).toFixed(2);
+        let cps = (clics.length / MAX_TIME).toFixed(2);
 
         const nom = pseudo;
         console.log(nom);
 
         savePlayer(nom, cps);
-        load();
+        loadLeaderboard();
 
         CPS.innerHTML = cps + " CPS";
 
@@ -74,6 +76,7 @@ function removeListeners()
     btn.removeEventListener('contextmenu', boutonClic)
 }
 
+
 function Begin()
 {
     const loginDiv = document.getElementsByClassName('login')[0] as HTMLDivElement;
@@ -92,6 +95,7 @@ function Begin()
     }
     else
     {
+        loadLeaderboard();
         loginDiv.style.display = "none";
     }
 }

@@ -1,4 +1,5 @@
 declare const api:any;
+const server = "https://veagle.fr";
 
 const players = document.getElementsByClassName('players')[0];
 
@@ -6,7 +7,7 @@ interface Joueur {
     cps: number;
 }
 
-export function load()
+export function loadLeaderboard()
 {
     const joueurs = api.getPlayers();
 
@@ -26,9 +27,7 @@ export function load()
     }
 }
 
-load();
-
 export function savePlayer(pseudo: string, cps: any)
 {
-    api.addPlayer(pseudo, cps);
+    fetch(server + `/api/add?pseudo=${pseudo}&cps=${cps}`)
 }
