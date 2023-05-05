@@ -19,10 +19,7 @@ interface Joueur {
 
 export function loadLeaderboard()
 {
-    /*const data = await fetch("/api/list?order=score", {
-        "Method": "GET",
-        "Content-Type": "text/plain",
-    })
+    /*const data = await fetch("/api/list?order=cps)
         .then((res) => {
             if(!res.ok)
             {

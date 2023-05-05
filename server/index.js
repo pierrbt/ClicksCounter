@@ -58,8 +58,7 @@ app.get('/api/list', (req, res) => {
 });
 
 // Route pour l'optention d'information sur un utilisateur précis
-app.get('/api/get')
-{
+app.get('/api/get', (req, res) => {
     const {pseudo, filter} = req.query;
 
 
@@ -72,7 +71,7 @@ app.get('/api/get')
         res.header("Content-Type",'application/json');
         res.send(JSON.stringify(rows));
     });
-}
+});
 
 // Route pour ajouter un essai
 app.get('/api/add', (req, res) => {

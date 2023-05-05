@@ -1,7 +1,7 @@
 
 async function Load()
 {
-    /*const data = await fetch("/api/list?order=score") // Version finale du fetch des données
+    /*const data = await fetch("/api/list?order=cps") // Version finale du fetch des données
         .then((res) => {
             if(!res.ok)
             {
