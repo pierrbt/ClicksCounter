@@ -14,6 +14,7 @@ const players = document.getElementsByClassName('players')[0];
 
 interface Joueur {
     cps: number;
+    user: string;
 }
 
 export async function loadLeaderboard()
@@ -40,17 +41,80 @@ export async function loadLeaderboard()
     if(!data)
         return;
 
-    players.innerHTML = "";
+    const leaderboard = document.createElement("div");
+    leaderboard.classList.add("leaderboard");
 
+    const lead = document.createElement("h3");
+    lead.classList.add("lead");
+    lead.innerText = "Classement";
+    leaderboard.appendChild(lead);
+
+    const table = document.createElement("table");
+    table.classList.add("table");
+
+// Créer la ligne d'en-tête du tableau
+    const headerRow = document.createElement("tr");
+    const rankHeader = document.createElement("th");
+    rankHeader.innerText = "Rang";
+    headerRow.appendChild(rankHeader);
+    const userHeader = document.createElement("th");
+    userHeader.innerText = "Joueur";
+    headerRow.appendChild(userHeader);
+    const scoreHeader = document.createElement("th");
+    scoreHeader.innerText = "Score (CPS)";
+    headerRow.appendChild(scoreHeader);
+    const dateHeader = document.createElement("th");
+    dateHeader.innerText = "Date";
+    headerRow.appendChild(dateHeader);
+    table.appendChild(headerRow);
+
+// Créer les lignes de données du tableau
     for (let i = 0; i < data.length; i++) {
-        console.log((i+1) + ". " + data[i].user + " - " + data[i].cps + " CPS");
-        const li = document.createElement("li");
-        li.innerHTML = `<b>${i+1}.</b> ${data[i].user} - ${data[i].cps} CPS`;
-        players.appendChild(li);
+        const row = document.createElement("tr");
+
+        // Rang
+        const rankCell = document.createElement("td");
+        rankCell.innerText = `${i+1}`;
+        row.appendChild(rankCell);
+
+        // Joueur
+        const userCell = document.createElement("td");
+        userCell.innerText = data[i].user;
+        row.appendChild(userCell);
+
+        // Score
+        const scoreCell = document.createElement("td");
+        scoreCell.innerText = `${data[i].cps}`;
+        row.appendChild(scoreCell);
+
+        // Date
+        const dateCell = document.createElement("td");
+        const date = new Date(data[i].date);
+        const today = new Date();
+        if (date.getDate() == today.getDate() && date.getMonth() == today.getMonth() && date.getFullYear() == today.getFullYear())
+            dateCell.innerText = "Aujourd'hui ";
+        else if (date.getDate() == today.getDate()-1 && date.getMonth() == today.getMonth() && date.getFullYear() == today.getFullYear())
+            dateCell.innerText = "Hier ";
+        else
+            dateCell.innerText = `Il y a ${today.getDate() - date.getDate()} jours `;
+
+        dateCell.innerText += `à ${date.getHours().toString().padStart(2, "0")}h${date.getMinutes().toString().padStart(2, "0")}`;
+
+        row.appendChild(dateCell);
+
+        table.appendChild(row);
     }
+
+    leaderboard.appendChild(table);
+
+// Ajouter le tableau au document
+    const container = document.querySelector(".container");
+    container.innerHTML = "";
+    container.appendChild(leaderboard);
+
 }
 
-export function savePlayer(pseudo: string, cps: any)
+export async function savePlayer(pseudo: string, cps: any)
 {
-    fetch(api.getServer() + `/api/add?user=${pseudo}&cps=${cps}`);
+    await fetch(api.getServer() + `/api/add?user=${pseudo}&cps=${cps}`);
 }

@@ -112,38 +112,47 @@ body {
 }
 
 
-
-
-
+.container {
+  display: flex;
+  justify-content: center;
+    align-items: center;
+}
 
 .leaderboard {
-  color: #fff;
-
-
-  width: 80%;
-  margin-top: 100px;
-  margin-left: 10%;
-
-  padding: 30px;
-  background-color: #222;
-  border-radius: 20px;
+  margin-top: 40px;
+  width: 100% ;
+  max-width: 800px;
+  margin-bottom: 50px;
+  color: #dddddd;
 }
 
 .lead {
-  margin-top: -10px;
-  justify-content: center;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
+  margin: 10px auto;
 }
 
-.players {
-  list-style: none;
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  padding: 10px;
+  border-radius: 10px;
 }
 
-.players li {
-  list-style: none;
+.table th,
+.table td {
+  text-align: center;
+  padding: 10px;
 }
+
+.table th {
+  font-weight: bold;
+  background-color: #444;
+  color: #ddd;
+}
+
+.table tr {
+  background-color: #444;
+}
+
 
 .footer {
   position: fixed;

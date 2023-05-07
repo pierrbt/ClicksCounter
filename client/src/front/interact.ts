@@ -53,8 +53,10 @@ async function Update() {
     {
         removeListeners();
         let cps = (clics.length / MAX_TIME).toFixed(2);
-        savePlayer(pseudo, cps);
-        loadLeaderboard();
+        savePlayer(pseudo, cps).then( () => {
+            loadLeaderboard();
+        })
+
         CPS.innerHTML = cps + " CPS";
         value.style.transform = "scale(1.5)";
         value.style.transition = "all 1s ease-in-out";
