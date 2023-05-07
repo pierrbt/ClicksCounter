@@ -158,6 +158,7 @@ function Begin() {
                     pseudo = valueDiv.value;
                     logout.addEventListener('click', () => {
                         pseudo = "";
+                        document.querySelector('.container').innerHTML = "";
                         Begin();
                     });
                     Begin();
@@ -165,9 +166,12 @@ function Begin() {
             });
         } else {
             // Chargement du classement
-            loadLeaderboard();
-            // Masquage des éléments de connexion
-            loginDiv.style.display = "none";
+            loadLeaderboard().then( () => {
+                // Masquage des éléments de connexion
+                loginDiv.style.display = "none";
+            });
+
+
         }
     }
 }

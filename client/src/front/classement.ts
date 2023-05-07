@@ -84,7 +84,7 @@ export async function loadLeaderboard()
 
         // Score
         const scoreCell = document.createElement("td");
-        scoreCell.innerText = `${data[i].cps}`;
+        scoreCell.innerText = `${data[i].cps.toFixed(2).toString()}`;
         row.appendChild(scoreCell);
 
         // Date
