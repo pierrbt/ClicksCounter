@@ -109,6 +109,9 @@ app.get('/api/add', (req, res) => {
     });
 });
 
+// When someone wants to go to /leaderboard, we send the files of ../leaderboard/ folder
+app.use('/leaderboard', express.static('../leaderboard/'));
+
 // Démarrage du serveur
 app.listen(port, () => {
     console.log(`Server listening on port ${port}`)

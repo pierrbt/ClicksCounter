@@ -5,6 +5,7 @@
 Les trois parties qui sont le serveur, l'affichage du leaderboard et l'application client.
 Les trois sont fait avec des technologies différentes en fonction de l'utilisation requise.
 Pour les applications utilisant Node, faites `npm i` et `npm start` pour les lancer.
+Pour lancer le leaderboard, il suffit de lancer le serveur et d'aller dans `/leaderboard`
 
 
 Plus d'informations dans les README.md respectifs des dossiers `client`, `leaderboard` et `server`.
