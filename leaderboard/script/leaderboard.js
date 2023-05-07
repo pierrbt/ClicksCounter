@@ -37,4 +37,4 @@ async function Load()
 
 Load();
 
-setInterval(Load, 5000); // Autorecharge chaque 5s
+setInterval(Load, 1000); // Autorecharge chaque seconde
