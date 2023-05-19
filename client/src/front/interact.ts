@@ -83,6 +83,7 @@ async function Update() {
 function setListeners()
 {
     btn.disabled = false;
+    btn.style.pointerEvents = "auto";
     btn.addEventListener('mouseup', boutonClic);
 
 }
@@ -90,6 +91,7 @@ function setListeners()
 function removeListeners()
 {
     btn.disabled = true;
+    btn.style.pointerEvents = "none";
     btn.removeEventListener('click', boutonClic);
 }
 
@@ -103,6 +105,10 @@ function Begin() {
     const serverDiv = document.getElementsByClassName('server')[0] as HTMLDivElement;
     const serverValue = document.getElementById('server') as HTMLInputElement;
     const serverButton = document.getElementById('confirm-server') as HTMLButtonElement;
+
+    const container = document.getElementsByClassName("container")[0] as HTMLDivElement;
+
+    container.style.display = "none";
 
     // Vérification de l'état de connexion
     if (!api.getServer()) {
@@ -168,6 +174,7 @@ function Begin() {
             // Chargement du classement
             loadLeaderboard().then( () => {
                 // Masquage des éléments de connexion
+                container.style.display = "flex";
                 loginDiv.style.display = "none";
             });
 
