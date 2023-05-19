@@ -1,3 +1,4 @@
+let lastData;
 
 async function Load()
 {
@@ -21,8 +22,86 @@ async function Load()
     if(!data)
         return;
 
-    console.log(data);
+    if (data.entries === lastData?.entries)
+    {
+        console.log("Hash identique");
+        return;
+    }
+    else
+    {
+        console.log("Hash différent");
+        console.log(data);
+    }
+
+
+
+
     // Parse des données et affichage
+    const container = document.getElementById("container");
+    const podium = document.getElementsByClassName("podium-users");
+    const list = document.getElementById("list");
+    const classement = document.getElementById("classement");
+
+    classement.innerHTML = "";
+
+    // do as enumerate() in python
+    for(const [index, user] of data.entries())
+    {
+        const element = document.createElement("div");
+        element.classList.add("user");
+
+        const rank = document.createElement("div");
+        rank.classList.add("rank");
+        rank.textContent = index + 1;
+
+        const username = document.createElement("div");
+        username.classList.add("username");
+        username.textContent = user.user;
+
+        const cps = document.createElement("div");
+        cps.classList.add("cps");
+        cps.textContent = user.cps;
+
+        const date = document.createElement("div");
+        date.classList.add("date");
+        date.textContent = user.date;
+
+        const shotDate = new Date(user.date);
+        const today = new Date();
+
+        if (shotDate.getDate() === today.getDate() && shotDate.getMonth() === today.getMonth() && shotDate.getFullYear() === today.getFullYear())
+            date.innerText = "Aujourd'hui ";
+        else if (shotDate.getDate() === today.getDate()-1 && shotDate.getMonth() === today.getMonth() && shotDate.getFullYear() === today.getFullYear())
+            date.innerText = "Hier ";
+        else
+            date.innerText = `Il y a ${today.getDate() - shotDate.getDate()} jours `;
+
+        date.innerText += `à ${shotDate.getHours().toString().padStart(2, "0")}h${shotDate.getMinutes().toString().padStart(2, "0")}`;
+
+        element.appendChild(rank);
+        element.appendChild(username);
+        element.appendChild(cps);
+
+
+        if(index < 3)
+        {
+            podium[index].innerHTML = "";
+
+            if(index === 0)
+                podium[index].innerHTML = '<img src="assets/laurier.webp" alt="laurier" class="podium-img">';
+
+            podium[index].appendChild(element);
+
+        }
+        else
+        {
+            element.appendChild(date);
+            classement.appendChild(element);
+        }
+    }
+
+    lastData = data;
+
 
 }
 
