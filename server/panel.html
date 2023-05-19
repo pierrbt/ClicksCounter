@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interface de requêtes SQL</title>
+  <style>
+    body {
+      background-color: #222;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      padding: 20px;
+    }
+
+    .query-form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .query-form textarea {
+      width: 400px;
+      height: 200px;
+      resize: none;
+      padding: 5px;
+      font-size: 14px;
+    }
+
+    .query-form button {
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: #fff;
+      font-size: 16px;
+      border: none;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    .console {
+      width: 400px;
+      height: 300px;
+      overflow-y: auto;
+      border: 1px solid #ccc;
+      padding: 5px;
+      font-size: 14px;
+    }
+
+    .console .query {
+      margin-bottom: 10px;
+    }
+
+    .console .query:last-child {
+      margin-bottom: 0;
+    }
+
+    .console .error {
+      color: #FF6347;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <form class="query-form" action="/query" method="post">
+    <textarea name="query" placeholder="Entrez une requête SQL"></textarea>
+    <button type="submit">Exécuter</button>
+  </form>
+  <div class="console" id="console"></div>
+</div>
+
+<script>
+  const form = document.querySelector('.query-form');
+  const consoleContainer = document.querySelector('#console');
+
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const query = document.querySelector('textarea[name="query"]').value.trim();
+    if (!query) {
+      return;
+    }
+
+    fetch('/query', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: 'query=' + encodeURIComponent(query)
+    })
+            .then(response => response.json())
+            .then(data => {
+              const queryDiv = document.createElement('div');
+              queryDiv.classList.add('query');
+
+              if (data.error) {
+                queryDiv.classList.add('error');
+                queryDiv.innerText = 'Erreur : ' + data.error;
+              } else {
+                queryDiv.innerHTML = JSON.stringify(data.result).toString().replace(/^"(.*)"$/gm, '$1');
+              }
+
+              consoleContainer.appendChild(queryDiv);
+              consoleContainer.scrollTop = consoleContainer.scrollHeight;
+            });
+  });
+</script>
+</body>
+</html>

@@ -12,10 +12,13 @@ const express = require('express')
 const sqlite3 = require('sqlite3').verbose()
 
 const app = express()
+
 const port = 5000
 
 const cors = require('cors');
 app.use(cors());
+
+
 
 // Connexion à la base de données SQLite3
 const db = new sqlite3.Database('./db.sqlite3', (err) => {
@@ -33,6 +36,7 @@ db.run(`CREATE TABLE IF NOT EXISTS tries (
         user VARCHAR(200),
         date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )`);
+
 
 // Route pour la page d'accueil
 app.get('/', (req, res) => {
@@ -108,6 +112,36 @@ app.get('/api/add', (req, res) => {
         }
     });
 });
+
+// Middleware pour analyser les données de la requête POST
+app.use(express.urlencoded({ extended: true }));
+
+// Page d'accueil
+app.get('/panel', (req, res) => {
+    res.sendFile('panel.html', { root: __dirname });
+});
+
+// Route pour exécuter une requête SQL
+app.post('/query', (req, res) => {
+    const { query } = req.body;
+    if (!query) {
+        res.send({ error: 'Aucune requête spécifiée' });
+    } else {
+        db.all(query, [], (err, rows) => {
+            if (err) {
+                res.send({ error: err.message });
+            } else {
+                if(!rows.length) {
+                    res.send({ result: '<span style=\'color: green;\'>Requête exécutée avec succès</span>' });
+                    return;
+                }
+                res.send({ result: rows });
+            }
+        });
+    }
+});
+
+
 
 // When someone wants to go to /leaderboard, we send the files of ../leaderboard/ folder
 app.use('/leaderboard', express.static('../leaderboard/'));
