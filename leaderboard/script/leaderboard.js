@@ -1,5 +1,19 @@
 let lastData;
 
+function isDataEqual(bef, aft)
+{
+    if (bef.length !== aft.length)
+        return false;
+
+    for(let i = 0; i < bef.length; i++)
+    {
+        if (bef[i].user !== aft[i].user || bef[i].cps !== aft[i].cps || bef[i].date !== aft[i].date)
+            return false;
+    }
+
+    return true;
+}
+
 async function Load()
 {
     const data = await fetch("/api/list?order=cps")
@@ -22,7 +36,7 @@ async function Load()
     if(!data)
         return;
 
-    if (data.entries === lastData?.entries)
+    if (lastData && isDataEqual(lastData, data))
     {
         console.log("Hash identique");
         return;
@@ -60,7 +74,7 @@ async function Load()
 
         const cps = document.createElement("div");
         cps.classList.add("cps");
-        cps.textContent = user.cps;
+        cps.textContent = user.cps.toFixed(1).toString();
 
         const date = document.createElement("div");
         date.classList.add("date");
@@ -68,6 +82,8 @@ async function Load()
 
         const shotDate = new Date(user.date);
         const today = new Date();
+
+        shotDate.setHours(shotDate.getHours() + 2); // Décalage horaire
 
         if (shotDate.getDate() === today.getDate() && shotDate.getMonth() === today.getMonth() && shotDate.getFullYear() === today.getFullYear())
             date.innerText = "Aujourd'hui ";

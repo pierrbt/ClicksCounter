@@ -91,6 +91,10 @@ export async function loadLeaderboard()
         const dateCell = document.createElement("td");
         const date = new Date(data[i].date);
         const today = new Date();
+
+        // Décalage horaire
+        date.setHours(date.getHours() + 2);
+
         if (date.getDate() == today.getDate() && date.getMonth() == today.getMonth() && date.getFullYear() == today.getFullYear())
             dateCell.innerText = "Aujourd'hui ";
         else if (date.getDate() == today.getDate()-1 && date.getMonth() == today.getMonth() && date.getFullYear() == today.getFullYear())
