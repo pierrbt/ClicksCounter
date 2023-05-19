@@ -1,3 +1,9 @@
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    padding: 0;
+}
+
 /* Styles pour le conteneur principal */
 #container {
     max-width: 800px;
@@ -22,9 +28,9 @@ ul {
     margin: 0;
 }
 
-.podium-users {
+.podium-user {
     display: inline-block;
-    width: 30%;
+    width: 33.33%;
     padding: 20px;
     margin: 10px;
     background-color: #f1f1f1;
@@ -34,23 +40,23 @@ ul {
     transition: transform 0.3s ease;
 }
 
-.podium-users:hover {
+.podium-user:hover {
     transform: scale(1.05);
 }
 
-.podium-users:first-child {
+.gold {
     background-color: gold;
 }
 
-.podium-users:nth-child(2) {
+.silver {
     background-color: silver;
 }
 
-.podium-users:nth-child(3) {
+.bronze {
     background-color: #cd7f32;
 }
 
-.podium-users .podium-img {
+.podium-user img {
     position: absolute;
     top: 10px;
     left: 10px;
@@ -59,7 +65,7 @@ ul {
 }
 
 /* Styles pour le tableau de classement */
-table {
+#classement-table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
@@ -71,48 +77,23 @@ th {
     border-bottom: 1px solid #ddd;
 }
 
-th:first-child {
-    width: 20%;
-}
-
-th:nth-child(2) {
-    width: 30%;
-}
-
-th:nth-child(3) {
-    width: 20%;
-}
-
-th:nth-child(4) {
-    width: 30%;
-}
-
 td {
     padding: 10px;
     text-align: center;
     border-bottom: 1px solid #ddd;
 }
 
-tbody {
-    width: 100%;
-}
-
 /* Styles pour les éléments utilisateur */
-.user {
+.user-row {
     display: flex;
+    justify-content: space-between;
     align-items: center;
     padding: 10px;
     background-color: #f9f9f9;
     border-radius: 10px;
     margin-bottom: 10px;
 
-    width: 100%;
 }
-
-tbody div {
-    width: 500px;
-}
-
 
 .rank {
     width: 20%;
@@ -131,7 +112,6 @@ tbody div {
 
 .date {
     width: 30%;
-    font-size: 12px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

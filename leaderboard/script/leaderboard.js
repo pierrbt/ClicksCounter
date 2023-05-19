@@ -50,69 +50,80 @@ async function Load()
 
 
 
-    // Parse des données et affichage
-    const container = document.getElementById("container");
-    const podium = document.getElementsByClassName("podium-users");
-    const list = document.getElementById("list");
-    const classement = document.getElementById("classement");
+    const podium = document.querySelectorAll(".podium-user");
+    const classementBody = document.getElementById("classement-body");
 
-    classement.innerHTML = "";
+    classementBody.innerHTML = ""; // Supprimer le contenu précédent
 
-    // do as enumerate() in python
-    for(const [index, user] of data.entries())
-    {
-        const element = document.createElement("div");
-        element.classList.add("user");
+    for (const [index, user] of data.entries()) {
+        const row = document.createElement("tr");
+        row.classList.add("user-row");
 
-        const rank = document.createElement("div");
-        rank.classList.add("rank");
-        rank.textContent = index + 1;
+        const rankCell = document.createElement("td");
+        rankCell.classList.add("rank");
+        rankCell.textContent = index + 1;
 
-        const username = document.createElement("div");
-        username.classList.add("username");
-        username.textContent = user.user;
+        const usernameCell = document.createElement("td");
+        usernameCell.classList.add("username");
+        usernameCell.textContent = user.user;
 
-        const cps = document.createElement("div");
-        cps.classList.add("cps");
-        cps.textContent = user.cps.toFixed(1).toString();
+        const cpsCell = document.createElement("td");
+        cpsCell.classList.add("cps");
+        cpsCell.textContent = user.cps.toFixed(1).toString();
 
-        const date = document.createElement("div");
-        date.classList.add("date");
-        date.textContent = user.date;
-
+        const dateCell = document.createElement("td");
+        dateCell.classList.add("date");
         const shotDate = new Date(user.date);
         const today = new Date();
 
         shotDate.setHours(shotDate.getHours() + 2); // Décalage horaire
 
-        if (shotDate.getDate() === today.getDate() && shotDate.getMonth() === today.getMonth() && shotDate.getFullYear() === today.getFullYear())
-            date.innerText = "Aujourd'hui ";
-        else if (shotDate.getDate() === today.getDate()-1 && shotDate.getMonth() === today.getMonth() && shotDate.getFullYear() === today.getFullYear())
-            date.innerText = "Hier ";
-        else
-            date.innerText = `Il y a ${today.getDate() - shotDate.getDate()} jours `;
-
-        date.innerText += `à ${shotDate.getHours().toString().padStart(2, "0")}h${shotDate.getMinutes().toString().padStart(2, "0")}`;
-
-        element.appendChild(rank);
-        element.appendChild(username);
-        element.appendChild(cps);
-
-
-        if(index < 3)
-        {
-            podium[index].innerHTML = "";
-
-            if(index === 0)
-                podium[index].innerHTML = '<img src="assets/laurier.webp" alt="laurier" class="podium-img">';
-
-            podium[index].appendChild(element);
-
+        if (
+            shotDate.getDate() === today.getDate() &&
+            shotDate.getMonth() === today.getMonth() &&
+            shotDate.getFullYear() === today.getFullYear()
+        ) {
+            dateCell.innerText = "Aujourd'hui ";
+        } else if (
+            shotDate.getDate() === today.getDate() - 1 &&
+            shotDate.getMonth() === today.getMonth() &&
+            shotDate.getFullYear() === today.getFullYear()
+        ) {
+            dateCell.innerText = "Hier ";
+        } else {
+            dateCell.innerText = `Il y a ${
+                today.getDate() - shotDate.getDate()
+            } jours `;
         }
-        else
-        {
-            element.appendChild(date);
-            classement.appendChild(element);
+
+        dateCell.innerText += `à ${shotDate
+            .getHours()
+            .toString()
+            .padStart(2, "0")}h${shotDate
+            .getMinutes()
+            .toString()
+            .padStart(2, "0")}`;
+
+        row.appendChild(rankCell);
+        row.appendChild(usernameCell);
+        row.appendChild(cpsCell);
+        row.appendChild(dateCell);
+
+        if (index < 3) {
+            const podiumUser = podium[index];
+            podiumUser.innerHTML = ""; // Supprimer le contenu précédent
+
+            if (index === 0) {
+                const img = document.createElement("img");
+                img.src = "assets/laurier.webp";
+                img.alt = "laurier";
+                img.classList.add("podium-img");
+                podiumUser.appendChild(img);
+            }
+
+            podiumUser.appendChild(row);
+        } else {
+            classementBody.appendChild(row);
         }
     }
 
