@@ -19,6 +19,8 @@ const timeV = document.getElementsByClassName('time-value')[0];
 const CPS = document.getElementsByClassName('cps')[0];
 const logout = document.getElementById("logout-button") as HTMLSpanElement;
 
+let refreshInterval: any;
+
 let startTime = 0;
 let clics: any = [];
 let interval: any
@@ -110,6 +112,7 @@ function Begin() {
 
     container.style.display = "none";
 
+    console.log(api.getServer());
     // Vérification de l'état de connexion
     if (!api.getServer()) {
         // Affichage des éléments de serveur et masquage des éléments de connexion
@@ -135,6 +138,8 @@ function Begin() {
             }
         });
     } else {
+        if(!refreshInterval)
+            refreshInterval = setInterval(loadLeaderboard, 1000);
         // Masquage des éléments de serveur
         serverDiv.style.display = "none";
         if (!pseudo) {

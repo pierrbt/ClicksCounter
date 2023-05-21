@@ -122,5 +122,3 @@ export async function savePlayer(pseudo: string, cps: any)
 {
     await fetch(api.getServer() + `/api/add?user=${pseudo}&cps=${cps}`);
 }
-
-setInterval(loadLeaderboard, 1000);
