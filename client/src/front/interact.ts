@@ -123,6 +123,9 @@ function Begin() {
         serverDiv.addEventListener('keydown', (e) => {
             if (e.key === "Enter") {
                 if (serverValue.value) {
+                    if(!serverValue.value.startsWith("http://") && !serverValue.value.startsWith("https://"))
+                        serverValue.value = "http://" + serverValue.value;
+
                     api.setServer(serverValue.value);
                     serverDiv.removeEventListener('keydown', () => {});
                     Begin();
@@ -133,6 +136,9 @@ function Begin() {
         // Ajout de l'événement de clic pour le bouton de serveur
         serverButton.addEventListener('click', () => {
             if (serverValue.value) {
+                if(!serverValue.value.startsWith("http://") && !serverValue.value.startsWith("https://"))
+                    serverValue.value = "http://" + serverValue.value;
+
                 api.setServer(serverValue.value);
                 Begin();
             }
